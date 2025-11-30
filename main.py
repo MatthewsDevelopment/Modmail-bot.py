@@ -1,16 +1,20 @@
 import discord
 from discord.ext import commands
+from dotenv import load_dotenv
+import os
 
+load_dotenv('.env')
+BOTPREFIX=os.getenv("PREFIX")
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
-client = commands.Bot(command_prefix= commands.when_mentioned_or('>'), intents=intents)
+client = commands.Bot(command_prefix=commands.when_mentioned_or(BOTPREFIX), intents=intents)
 client.remove_command("help")
 
 @client.event
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="My DMs"))
-    print("Modmail Bot Version 2 Ready to Go")
+    print("Modmail-Bot is Ready")
 
 @client.event
 async def on_message(message):
@@ -34,9 +38,9 @@ async def on_message(message):
 
 @client.command()
 async def help(ctx):
-    embed = discord.Embed(title="Modmail Bot", description="Here is my list of Commands", color=(58101))
-    embed.add_field(name="General", value=">help - This message\n>ping - Get the Bot latency\n>setupguide - Instructions on how to setup the modmail system>setupmodmail - Setup the Modmail channel.", inline=False)
-    embed.add_field(name="Source Code", value="https://github.com/MatthewDevelopment/Modmail-bot.py", inline=False)
+    embed = discord.Embed(title="Modmail Bot by Matthews Development", description="Here is my list of Commands", color=(58101))
+    embed.add_field(name="General", value=f"{BOTPREFIX}help - This message\n{BOTPREFIX}ping - Get the Bot latency\n{BOTPREFIX}setupguide - Instructions on how to setup the modmail system\n{BOTPREFIX}setupmodmail - Setup the Modmail channel.", inline=False)
+    embed.add_field(name="Source Code", value="https://gitlab.com/MatthewsDevelopment/modmailpy", inline=False)
     await ctx.send(embed=embed)
 
 @client.command()
@@ -59,18 +63,20 @@ async def setupmodmail_error(ctx, error):
     if isinstance(error, commands.BotMissingPermissions):
         await ctx.send("AN ERROR HAS OCCURED\nI do not have permissions to manage channels. Please make sure I have the **MANAGE_CHANNELS** permission and try again")
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send('AN ERROR HAS OCCURED\nYou need to have **MANAGE_GUILD** permission to use this command.')
+        await ctx.send('AN ERROR HAS OCCURED\nYou need to have the **MANAGE_GUILD** permission to use this command.')
     else:
         raise error
 
 @client.command()
 async def setupguide(ctx):
     embed = discord.Embed(title="Modmail Bot", description="Here is instructions on how to setup the basic modmail system", color=(58101))
-    embed.add_field(name="Steps", value="After inviting me, create a channel called modmail or run my setupmodmail command and I will set up the channel for you. Note that if you use the command, you need Manage Server permissions and I need Manage channel permissions.", inline=False)
-    embed.add_field(name="More info", value="The Github repo has a README file for detailed information: https://github.com/MatthewDevelopment/Modmail-bot.py", inline=False)
+    embed.add_field(name="Steps", value="After inviting the bot, create a channel called modmail or run my setupmodmail command and I will set up the channel for you. Note that if you use the command, you need Manage Server permissions and I need Manage channel permissions.", inline=False)
+    embed.add_field(name="More info", value="The Github repo has a README file for detailed information: https://gitlab.com/MatthewsDevelopment/modmailpy", inline=False)
     await ctx.send(embed=embed)
 
 
 
 
-client.run("")
+
+TOKEN = os.getenv("DISCORDBOTTOKEN")
+client.run(TOKEN)

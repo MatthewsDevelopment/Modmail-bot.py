@@ -1,1 +1,3 @@
-discord.py==1.7.1
+discord.py
+discord
+python-dotenv
