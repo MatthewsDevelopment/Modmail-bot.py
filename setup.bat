@@ -6,7 +6,7 @@ cls
 echo Modmail-Bot.py
 echo Provided by: Matthew's Development.
 echo 1) Install Python packages
-echo 2) List installed Python packages
+echo 2) Start Bot
 echo 3) Source Codes
 echo 4) Exit
 set /p menu=
@@ -28,6 +28,7 @@ goto menu
 
 :start
 cls
+echo Starting Bot....
 py -m python ./main.py
 pause
 goto menu
